@@ -34,3 +34,6 @@ cp ./config.json /etc/shadowsocks/
 # Windows
 [windows教程](https://github.com/shadowsocks/shadowsocks-windows)
 其中服务器配置请参考config.json
+# Android
+[Android APP](https://play.google.com/store/apps/details?id=com.github.shadowsocks)
+其中服务器配置请参考config.jason
