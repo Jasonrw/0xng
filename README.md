@@ -1,3 +1,4 @@
+# Ubuntu
 ## 安装ss
 先安装SS
 ```bash
@@ -29,3 +30,7 @@ cp ./config.json /etc/shadowsocks/
 在`/etc/rc.local `文件的 `exit 0`前面添加
 `sslocal -c /etc/shadowsocks/config.json`
 然后保存退出后重启计算机，ss将在每次开机自动后台启动。
+
+# Windows
+[windows教程](https://github.com/shadowsocks/shadowsocks-windows)
+其中服务器配置请参考config.json
