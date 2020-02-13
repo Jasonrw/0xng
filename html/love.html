@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="shortcut icon" type="image/x-icon" href="../static/img/love.ico">
+    <title>梁小稳，我爱你</title>
+
+    <style type="text/css">
+        @font-face {
+            font-family: digit;
+            src: url('digital-7_mono.ttf') format("truetype");
+        }
+
+        #weixin-tip{display:none;position:fixed;left:0;top:0;background:rgba(0,0,0,1);filter:alpha(opacity=80);width:100%;height:100%;z-index:100;}
+#weixin-tip p{text-align:center;margin-top:10%;padding:0 5%;position:relative;}
+#weixin-tip .close{color:#fff;padding:5px;font:bold 20px/24px simsun;text-shadow:0 1px 0 #ddd;position:absolute;top:0;left:5%;}
+    </style>
+
+    <link href="../static/css/default.css" type="text/css" rel="stylesheet">
+    <script type="text/javascript" src="../static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../static/js/garden.js"></script>
+    <script type="text/javascript" src="../static/js/functions.js"></script>
+
+    <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
+    <!--[if lt IE 9]><script src="../static/plugins/bootstrap/assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+    <script src="../static/plugins/bootstrap/assets/js/ie-emulation-modes-warning.js"></script>
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="../static/js/html5shiv.min.js"></script>
+    <script src="../static/js/respond.min.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+    <div id="weixin-tip"><p><img src="../img/live_weixin.png" alt="微信打开"/><span id="close" title="关闭" class="close">×</span></p></div>
+<div id="mainDiv">
+    <div id="content">
+        <div id="code">
+            <span class="comments">/**</span><br />
+            <span class="space"/>
+            <span class="comments">* 2019-7-2,</span><br />
+            <span class="space"/>
+            <span class="comments">* <span class="today"></span>.</span><br />
+            <span class="space"/>
+            <span class="comments">*/</span><br />
+            <span class="comments">// Compiled at 2020 Valentine's Day! </span><br />
+            <span class="comments">// By Jason Hu </span><br />
+            从认识你的第一天开始，<br />
+            到今天我们一起度过的第一个情人节，<br />
+            <!-- <span class="comments">// They love each other.</span><br /> -->
+            一共是<span class="keyword">227</span>天。<br />
+            <!-- <span class="comments">// AS time goes on.</span><br /> -->
+            <br />
+            我想，<br />
+            你真是一个非常可爱的人，<br />
+            真应该遇到最好的人，<br />
+            <!-- <span class="comments">// At the same time.</span><br /> -->
+            <span class="keyword">我真希望我就是。</span><br />
+            <br />
+            <span class="comments">我曾经疑惑为什么要不停的给你讲我自己的阴暗面，</span><br />
+            <span class="comments">直到今天我发现：</span><br />
+            <span class="keyword">我想要把我的整个灵魂都给你，</span><br />
+            <span class="comments">连同他的怪癖、小脾气、忽明忽暗、</span><br />
+            <span class="comments">一千八百种坏毛病,</span> <br />
+            <span class="comments">他真讨厌！只有一点好，</span><br />
+            <span class="keyword"> 爱你。</span><br />
+            <br />
+            <span class="comments">遇到你之前我慢慢的发现我的思维越来越没有温度，</span><br />
+            <span class="comments">也许我是个坏人，</span><br />
+            <span class="keyword">不过我只要你吻我一下我就会变好呢。</span><br />
+            <br>
+            <br>
+            我的小仙女:
+            <span class="placeholder"/><span style="font-size: large;font-family: 'Courier New', Courier, monospace;color: coral;">I Love You</span><br />
+        </div>
+        <div id="loveHeart">
+            <canvas id="garden"></canvas>
+            <div id="words">
+                <div id="messages">
+                    亲爱的WEN，我们在一起已经
+                    <div id="elapseClock"></div>
+                </div>
+                <div id="loveu">
+                    <span class="word"></span><br/>
+                    <div class="signature">- <span class="signatureName">Jason Hu</span></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+var is_weixin = (function(){return navigator.userAgent.toLowerCase().indexOf('micromessenger') !== -1})();
+window.onload = function() {
+	var winHeight = typeof window.innerHeight != 'undefined' ? window.innerHeight : document.documentElement.clientHeight; //兼容IOS，不需要的可以去掉
+	var btn = document.getElementById('J_weixin');
+	var tip = document.getElementById('weixin-tip');
+	var close = document.getElementById('close');
+	if (is_weixin) {
+		tip.style.height = winHeight + 'px'; //兼容IOS弹窗整屏
+		tip.style.display = 'block';
+		return false;
+	}
+}
+</script>
+
+<script type="text/javascript">
+    //获取地址参数值
+    function getQueryStringFn(name) {
+        var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+        var r = window.location.search.substr(1).match(reg);
+        if(r!=null)return decodeURI(r[2]); return null;
+    }
+</script>
+<script type="text/javascript">
+    // 赋值
+    var boyName = '';
+    var girlName = '';
+    var meetDate = '';
+    var word = '爱你直到永永远远。';
+    var signatureName = 'Jason Hu';
+    // var meetDateArr = meetDate.split("-");
+    $('.boyName').text(boyName);
+    $('.girlName').text(girlName);
+    var today = new Date();
+    $('.meetDate').text(meetDate);
+    $('.today').text(today.getFullYear() + "-" + (today.getMonth() + 1) + "-" + today.getDate());
+    $('.word').text(word);
+    $('.signatureName').text(signatureName);
+
+    var offsetX = $("#loveHeart").width() / 2;
+    var offsetY = $("#loveHeart").height() / 2 - 55;
+    var together = new Date();
+    together.setFullYear(2019, 6, 2);
+    together.setHours(12);
+    together.setMinutes(57);
+    together.setSeconds(0);
+    together.setMilliseconds(0);
+
+    if (!document.createElement('canvas').getContext) {
+        var msg = document.createElement("div");
+        msg.id = "errorMsg";
+        msg.innerHTML = "Your browser doesn't support HTML5!<br/>Recommend use Chrome 14+/IE 9+/Firefox 7+/Safari 4+";
+        document.body.appendChild(msg);
+        $("#code").css("display", "none")
+        $("#copyright").css("position", "absolute");
+        $("#copyright").css("bottom", "10px");
+        document.execCommand("stop");
+    } else {
+        // 画心
+        setTimeout(function () {
+            startHeartAnimation();
+        }, 900);
+
+        // 定时计算时间
+        timeElapse(together);
+        setInterval(function () {
+            timeElapse(together);
+        }, 1000);
+
+        // 加载代码
+        adjustCodePosition();
+        $("#code").typewriter();
+    }
+</script>
+</body>
+</html>
