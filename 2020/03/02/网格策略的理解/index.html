@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html >
+<head>
+
+    <!--[if lt IE 9]>
+        <style>body {display: none; background: none !important} </style>
+        <meta http-equiv="Refresh" Content="0; url=//outdatedbrowser.com/" />
+    <![endif]-->
+
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="format-detection" content="telephone=no" />
+<meta name="author" content="Jason Hu" />
+
+
+
+<meta name="description" content="前几年做过量化择时，主要帮人实现策略，从来没有想着有策略我自己能够理解，第一次看到网格策略的时候，可能是两年以前的事了，才发现，原来有点东西只要写的清楚，我还是能够理解的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="对网格策略的理解">
+<meta property="og:url" content="http://0xng.com/2020/03/02/网格策略的理解/index.html">
+<meta property="og:site_name" content="Jason's Blog">
+<meta property="og:description" content="前几年做过量化择时，主要帮人实现策略，从来没有想着有策略我自己能够理解，第一次看到网格策略的时候，可能是两年以前的事了，才发现，原来有点东西只要写的清楚，我还是能够理解的">
+<meta property="og:image" content="http://0xng.com/2020/03/02/网格策略的理解/基础版操作表格.png">
+<meta property="og:image" content="http://0xng.com/2020/03/02/网格策略的理解/华宝油气-基础版操作示例.png">
+<meta property="og:image" content="http://0xng.com/2020/03/02/网格策略的理解/逐渐加码操作表格.png">
+<meta property="og:image" content="http://0xng.com/2020/03/02/网格策略的理解/多网-小网.png">
+<meta property="og:image" content="http://0xng.com/2020/03/02/网格策略的理解/多网-中网.png">
+<meta property="og:image" content="http://0xng.com/2020/03/02/网格策略的理解/多网-大网.png">
+<meta property="og:updated_time" content="2020-03-02T14:49:03.407Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="对网格策略的理解">
+<meta name="twitter:description" content="前几年做过量化择时，主要帮人实现策略，从来没有想着有策略我自己能够理解，第一次看到网格策略的时候，可能是两年以前的事了，才发现，原来有点东西只要写的清楚，我还是能够理解的">
+<meta name="twitter:image" content="http://0xng.com/2020/03/02/网格策略的理解/基础版操作表格.png">
+
+<link rel="apple-touch-icon" href= "/apple-touch-icon.png">
+
+
+    <link rel="alternative" href="/atom.xml" title="Jason&#39;s Blog" type="application/atom+xml">
+
+
+
+    <link rel="shortcut icon" href="/favicon.png">
+
+
+
+    <link href="//cdn.bootcss.com/animate.css/3.5.1/animate.min.css" rel="stylesheet">
+
+
+
+    <link href="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.css" rel="stylesheet">
+
+
+
+    <script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
+    <link href="//cdn.bootcss.com/pace/1.0.2/themes/blue/pace-theme-minimal.css" rel="stylesheet">
+
+
+<link rel="stylesheet" href="/css/style.css">
+
+
+
+<link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+
+
+<title>对网格策略的理解 | Jason&#39;s Blog</title>
+
+<script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
+<script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+
+<script>
+    var yiliaConfig = {
+        fancybox: true,
+        animate: true,
+        isHome: false,
+        isPost: true,
+        isArchive: false,
+        isTag: false,
+        isCategory: false,
+        open_in_new: false,
+        fancybox_js: "//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.js",
+        scrollreveal: "//cdn.bootcss.com/scrollReveal.js/3.1.4/scrollreveal.min.js",
+        search: undefined
+    }
+</script>
+
+
+    <script> yiliaConfig.jquery_ui = [false]; </script>
+
+
+
+    <script> yiliaConfig.rootUrl = "\/";</script>
+
+
+
+
+
+
+</head>
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+    <header id="header" class="inner">
+        <a href="/" class="profilepic">
+            <img src="/img/avatar.png" class="animated zoomIn">
+        </a>
+        <hgroup>
+          <h1 class="header-author"><a href="/">Jason Hu</a></h1>
+        </hgroup>
+
+        
+        <p class="header-subtitle">心情、随笔、技术文章摘录</p>
+        
+
+        
+
+
+        
+            <div id="switch-btn" class="switch-btn">
+                <div class="icon">
+                    <div class="icon-ctn">
+                        <div class="icon-wrap icon-house" data-idx="0">
+                            <div class="birdhouse"></div>
+                            <div class="birdhouse_holes"></div>
+                        </div>
+                        <div class="icon-wrap icon-ribbon hide" data-idx="1">
+                            <div class="ribbon"></div>
+                        </div>
+                        
+                        <div class="icon-wrap icon-link hide" data-idx="2">
+                            <div class="loopback_l"></div>
+                            <div class="loopback_r"></div>
+                        </div>
+                        
+                        
+                        <div class="icon-wrap icon-me hide" data-idx="3">
+                            <div class="user"></div>
+                            <div class="shoulder"></div>
+                        </div>
+                        
+                    </div>
+                    
+                </div>
+                <div class="tips-box hide">
+                    <div class="tips-arrow"></div>
+                    <ul class="tips-inner">
+                        <li>菜单</li>
+                        <li>标签</li>
+                        
+                        <li>友情链接</li>
+                        
+                        
+                        <li>关于我</li>
+                        
+                    </ul>
+                </div>
+            </div>
+        
+
+        <div id="switch-area" class="switch-area">
+            <div class="switch-wrap">
+                <section class="switch-part switch-part1">
+                    <nav class="header-menu">
+                        <ul>
+                        
+                            <li><a href="/">主页</a></li>
+                        
+                            <li><a href="/archives/">所有文章</a></li>
+                        
+                            <li><a href="/tags/">标签云</a></li>
+                        
+                            <li><a href="/about/">关于我</a></li>
+                        
+                        </ul>
+                    </nav>
+                    <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa Email" target="_blank" href="/jasonfcku#gmail.com" title="Email"></a>
+                            
+                                <a class="fa GitHub" target="_blank" href="#" title="GitHub"></a>
+                            
+                                <a class="fa RSS" target="_blank" href="/atom.xml" title="RSS"></a>
+                            
+                        </ul>
+                    </nav>
+                </section>
+                
+                
+                <section class="switch-part switch-part2">
+                    <div class="widget tagcloud" id="js-tagcloud">
+                        <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android/">Android</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android开发/">Android开发</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/App欢迎界面/">App欢迎界面</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Blog/">Blog</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/BonusTodoList/">BonusTodoList</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CentOS6/">CentOS6</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ETF/">ETF</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/FloatingActionButton/">FloatingActionButton</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Google/">Google</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Kali/">Kali</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Kindle/">Kindle</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MVP/">MVP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Pokemon-Go/">Pokemon Go</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Progress-Bar/">Progress Bar</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python/">Python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Source-Insight/">Source Insight</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/UI/">UI</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Web-Browser/">Web Browser</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Xposed/">Xposed</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android-Studio/">android Studio</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android开发/">android开发</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/chrome/">chrome</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/chromebook/">chromebook</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/dictionary/">dictionary</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/gitHub-Pages/">gitHub Pages</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jpg/">jpg</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/material-design/">material design</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/nexus/">nexus</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/password/">password</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/pip/">pip</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/pip2pi/">pip2pi</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/">python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/shadowsocks/">shadowsocks</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tool/">tool</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tools/">tools</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/vim/">vim</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/widget/">widget</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/中文乱码/">中文乱码</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/中文域名/">中文域名</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/二进制/">二进制</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/博客/">博客</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/固定翼/">固定翼</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/基金/">基金</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/多旋翼/">多旋翼</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/安卓/">安卓</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/投资/">投资</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/推送/">推送</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/提升自我/">提升自我</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/插件/">插件</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/文件修复/">文件修复</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/无人机/">无人机</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/游戏/">游戏</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/激活/">激活</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/环境搭建/">环境搭建</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/生活/">生活</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/电子书/">电子书</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/科学上网/">科学上网</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/类图/">类图</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/记账/">记账</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/语法/">语法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/迷茫/">迷茫</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/阅读代码/">阅读代码</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/随笔/">随笔</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/预算/">预算</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/飞控板/">飞控板</a></li></ul>
+                    </div>
+                </section>
+                
+                
+                
+                <section class="switch-part switch-part3">
+                    <div id="js-friends">
+                    
+                      <a target="_blank" class="main-nav-link switch-friends-link" href="https://hexo.io">Hexo</a>
+                    
+                      <a target="_blank" class="main-nav-link switch-friends-link" href="https://pages.github.com/">GitHub</a>
+                    
+                      <a target="_blank" class="main-nav-link switch-friends-link" href="http://www.kalitools.com">KaliTools</a>
+                    
+                    </div>
+                </section>
+                
+
+                
+                
+                <section class="switch-part switch-part4">
+                
+                    <div id="js-aboutme">不在互联网行业的程序猿</div>
+                </section>
+                
+            </div>
+        </div>
+    </header>                
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+      <div class="overlay">
+          <div class="slider-trigger"></div>
+          <h1 class="header-author js-mobile-header hide"><a href="/" title="回到主页">Jason Hu</a></h1>
+      </div>
+    <div class="intrude-less">
+        <header id="header" class="inner">
+            <a href="/" class="profilepic">
+                <img src="/img/avatar.png" class="animated zoomIn">
+            </a>
+            <hgroup>
+              <h1 class="header-author"><a href="/" title="回到主页">Jason Hu</a></h1>
+            </hgroup>
+            
+            <p class="header-subtitle">心情、随笔、技术文章摘录</p>
+            
+            <nav class="header-menu">
+                <ul>
+                
+                    <li><a href="/">主页</a></li>
+                
+                    <li><a href="/archives/">所有文章</a></li>
+                
+                    <li><a href="/tags/">标签云</a></li>
+                
+                    <li><a href="/about/">关于我</a></li>
+                
+                <div class="clearfix"></div>
+                </ul>
+            </nav>
+            <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa Email" target="_blank" href="/jasonfcku#gmail.com" title="Email"></a>
+                            
+                                <a class="fa GitHub" target="_blank" href="#" title="GitHub"></a>
+                            
+                                <a class="fa RSS" target="_blank" href="/atom.xml" title="RSS"></a>
+                            
+                        </ul>
+            </nav>
+        </header>                
+    </div>
+    <link class="menu-list" tags="标签" friends="友情链接" about="关于我"/>
+</nav>
+      <div class="body-wrap"><article id="post-网格策略的理解" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2020/03/02/网格策略的理解/" class="article-date">
+      <time datetime="2020-03-02T14:24:39.000Z" itemprop="datePublished">2020-03-02</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      对网格策略的理解
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/财务/">财务</a>
+    </div>
+
+
+        
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/ETF/">ETF</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/基金/">基金</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/投资/">投资</a></li></ul>
+    </div>
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <h1 id="网格策略的理解"><a href="#网格策略的理解" class="headerlink" title="网格策略的理解"></a>网格策略的理解</h1><p>前几年做过量化择时，主要帮人实现策略，从来没有想着有策略我自己能够理解，第一次看到网格策略的时候，可能是两年以前的事了，才发现，原来有点东西只要写的清楚，我还是能够理解的</p>
+<h2 id="什么叫交易策略"><a href="#什么叫交易策略" class="headerlink" title="什么叫交易策略"></a>什么叫交易策略</h2><p>我对证券类（股票、基金、期货、外汇）的投资的理解其实有经历过几个阶段</p>
+<h3 id="第一个阶段-选股"><a href="#第一个阶段-选股" class="headerlink" title="第一个阶段 选股"></a>第一个阶段 选股</h3><p>在第一次接触到证券类的产品后，第一个想法一定是股神现在都买的什么样的股票，我也要跟他买一样的，这个阶段还没有真正的参与到证券交易这个过程中去，以为选好了一支（或几支）股票以后就坐等收益就行了</p>
+<h3 id="第二个阶段-追涨"><a href="#第二个阶段-追涨" class="headerlink" title="第二个阶段 追涨"></a>第二个阶段 追涨</h3><p>在开始正式的股票交易以后，因为第一个阶段没有完全弄清楚怎么选股（事实上根本不可能弄清楚），故而在选股的时候只能借助于自己对于股票市场的理解，看到有涨的势头就赶紧跟，结果可想而知。</p>
+<h3 id="第三个阶段-追跌"><a href="#第三个阶段-追跌" class="headerlink" title="第三个阶段 追跌"></a>第三个阶段 追跌</h3><p>经过第二个阶段，逐渐明白了应该在低位买入高位卖出，这个时候就开始追跌，越跌越买，越买越跌，我真实经历的是买了，跌了我不着急，涨了才叫着急，因为一开始没有明确的目标到底什么时候抛，导致涨了被跌了还难受。</p>
+<h3 id="第四个阶段-策略"><a href="#第四个阶段-策略" class="headerlink" title="第四个阶段 策略"></a>第四个阶段 策略</h3><p>目前的阶段，明白了一开始就要明确买入的时候的抛出的位置，然后，死等！</p>
+<h3 id="交易策略的作用"><a href="#交易策略的作用" class="headerlink" title="交易策略的作用"></a>交易策略的作用</h3><p>交易策略的用处就是让你能够理性的决策</p>
+<ol>
+<li>使用闲置的资金的多大一部分？</li>
+<li>买什么样的股票？</li>
+<li>什么时候买？</li>
+<li>什么时候抛？</li>
+</ol>
+<h3 id="常见的策略"><a href="#常见的策略" class="headerlink" title="常见的策略"></a>常见的策略</h3><p>而且策略并不是越复杂越好，下面两种常见的策略都是特别简单易懂的策略，如果按照规则操作的话大概率超过大多数A股投资者的投资收益<br>。</p>
+<h4 id="定投"><a href="#定投" class="headerlink" title="定投"></a>定投</h4><p>每个月定时买入某个品种，积少成多，集腋成裘，平滑成本，最终牛市中赚钱。<br>改进：通常的定投的问题在于没有设置卖出点，可以手动设置一个比如整体盈利100%或者年化20%的时候卖出。</p>
+<h4 id="5-5股债平衡"><a href="#5-5股债平衡" class="headerlink" title="5:5股债平衡"></a>5:5股债平衡</h4><p>这就是最简单的投资策略之一：把你的资产买25%沪深300，25%中证500，50%利率债，然后定期或者定幅再平衡（三个月或者六个月操作一次，恢复各品种初始比例；或者某个品种上涨50%后触发定幅操作机制，恢复各品种初始比例）。</p>
+<h2 id="什么叫网格策略"><a href="#什么叫网格策略" class="headerlink" title="什么叫网格策略"></a>什么叫网格策略</h2><p>网格策略也是一种简单易懂的交易策略</p>
+<h3 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h3><p>首先，各个大的证券市场，在长时间来看，都是涨幅非常巨大的，但是这样的涨幅是通常跨越了数十年，考虑到这几十年的各种变化，像这样超级长期的持有几乎不可能，更加合理的应该是利用中短期的波动来赚取长期稳定的收益。</p>
+<h3 id="试用范围"><a href="#试用范围" class="headerlink" title="试用范围"></a>试用范围</h3><p>长期上下震荡波动的品种，</p>
+<h3 id="具体操作"><a href="#具体操作" class="headerlink" title="具体操作"></a>具体操作</h3><h4 id="主策略-网格策略基础版"><a href="#主策略-网格策略基础版" class="headerlink" title="主策略 网格策略基础版"></a>主策略 网格策略基础版</h4><h5 id="1-确定交易品种"><a href="#1-确定交易品种" class="headerlink" title="1. 确定交易品种"></a>1. 确定交易品种</h5><p>一定是要不会死的品种，不管怎么震荡都没事，但是弄不好死了就不好了。</p>
+<h5 id="2-制作网格表格"><a href="#2-制作网格表格" class="headerlink" title="2. 制作网格表格"></a>2. 制作网格表格</h5><h6 id="2-1-设置交易价格"><a href="#2-1-设置交易价格" class="headerlink" title="2.1. 设置交易价格"></a>2.1. 设置交易价格</h6><p>设置进入价格，进入价格的设置应该是略低于价值的时候，具体应该根据具体情况进行分析（<strong>是不是可以通过以往的价格来预测价值线在哪里</strong>）<br>网格大小，网格的大小根据波动的大小来，基金在通常情况下采用5%来作为网格</p>
+<h6 id="2-2-设置交易金额"><a href="#2-2-设置交易金额" class="headerlink" title="2.2. 设置交易金额"></a>2.2. 设置交易金额</h6><p> 每个品种投入的钱都应该提前规划好，按照网格数平均分配</p>
+<h6 id="2-3-设置交易日期"><a href="#2-3-设置交易日期" class="headerlink" title="2.3. 设置交易日期"></a>2.3. 设置交易日期</h6><p>交易日期主要通过挂单的方式进行，等待走势落入网中</p>
+<h5 id="3-压力测试"><a href="#3-压力测试" class="headerlink" title="3. 压力测试"></a>3. 压力测试</h5><p>压力测试即在设置投资的资金量的时候，考虑最坏的情况能够承受多大的资金损失</p>
+<h5 id="4-设置交易提醒"><a href="#4-设置交易提醒" class="headerlink" title="4. 设置交易提醒"></a>4. 设置交易提醒</h5><p>通过挂单软件进行交易提醒和交易</p>
+<h4 id="主策略的问题"><a href="#主策略的问题" class="headerlink" title="主策略的问题"></a>主策略的问题</h4><p>下面是华宝油气依据基本版的操作表格<br><img src="/2020/03/02/网格策略的理解/基础版操作表格.png" alt="基础版操作表格.png"></p>
+<p>接下来是通过这个策略在前三年的操作示例<br><img src="/2020/03/02/网格策略的理解/华宝油气-基础版操作示例.png" alt="e607be4cd86eb20096df39cdfa315521.png"></p>
+<p>可以看到尽管这个基金这几年基本上没有增长，但是这个策略一直在低吸高抛<br>但是这其实是存在一个问题的，即在2015年到2016年的暴涨中，几乎没有操作，导致错过了一波真正的行情。</p>
+<h4 id="子策略"><a href="#子策略" class="headerlink" title="子策略"></a>子策略</h4><p>为了解决这个问题，增加几个子策略</p>
+<h4 id="留下利润"><a href="#留下利润" class="headerlink" title="留下利润"></a>留下利润</h4><p>顾名思义，即每次把利润留下来，这部分反正是赚的钱，可以一直放到里面，一直到你觉得价格远大于价值的时候在抛售。<br>另外，如果觉得只留利润太少的话，在可承受的范围内可以留1倍或者多倍利润的本金（在上述做法的基础上增加杠杆，提升利润空间）</p>
+<h4 id="逐渐加码"><a href="#逐渐加码" class="headerlink" title="逐渐加码"></a>逐渐加码</h4><p>考虑到价格越低的时候，与价值的差值绝对值越大，在价格越低的网格中增加投入比例，比如每个低价格的网格增加10%的投入<br><img src="/2020/03/02/网格策略的理解/逐渐加码操作表格.png" alt="a27a9bb719db5bc17984764e70658ff5.png"></p>
+<h4 id="多网"><a href="#多网" class="headerlink" title="多网"></a>多网</h4><p>考虑到上述最根本的问题，即为什么吃不到最大的一波行情？其实是因为网格的跨度小了了原因，假设你网格的买入卖出价格设定为20%甚至60%的差值，这个时候操作的次数更少，但是每次操作的回报率要高很多了<br>下面是一个三张网的操作示例（小网5%，中网15%， 大网30%）<br><img src="/2020/03/02/网格策略的理解/多网-小网.png" alt="8e86ffb4d7608fde5ce0b4d0bf5e265c.png"><br><img src="/2020/03/02/网格策略的理解/多网-中网.png" alt="64ba6ad5fa6b858b58ef59a4c301514d.png"><br><img src="/2020/03/02/网格策略的理解/多网-大网.png" alt="369204374a44c8a94132e7d001ca993f.png"></p>
+
+      
+    </div>
+    
+  </div>
+  
+    
+    <div class="copyright">
+        <p><span>本文标题:</span><a href="/2020/03/02/网格策略的理解/">对网格策略的理解</a></p>
+        <p><span>文章作者:</span><a href="/" title="回到主页">Jason Hu</a></p>
+        <p><span>发布时间:</span>2020-03-02, 22:24:39</p>
+        <p><span>最后更新:</span>2020-03-02, 22:49:03</p>
+        <p>
+            <span>原始链接:</span><a class="post-url" href="/2020/03/02/网格策略的理解/" title="对网格策略的理解">http://0xng.com/2020/03/02/网格策略的理解/</a>
+            <span class="copy-path" data-clipboard-text="原文: http://0xng.com/2020/03/02/网格策略的理解/　　作者: Jason Hu" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
+            <script> var clipboard = new Clipboard('.copy-path'); </script>
+        </p>
+        <p>
+            <span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" title="CC BY-NC-SA 4.0 International" target = "_blank">"署名-非商用-相同方式共享 4.0"</a> 转载请保留原文链接及作者。
+        </p>
+    </div>
+
+
+
+    <nav id="article-nav">
+        
+        
+            <div id="article-nav-older" class="article-nav-title">
+                <a href="/2020/03/02/ETF投资初步考虑/">
+                    ETF投资初步考虑
+                </a>
+            </div>
+        
+    </nav>
+
+  
+</article>
+
+    <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#网格策略的理解"><span class="toc-number">1.</span> <span class="toc-text">网格策略的理解</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#什么叫交易策略"><span class="toc-number">1.1.</span> <span class="toc-text">什么叫交易策略</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#第一个阶段-选股"><span class="toc-number">1.1.1.</span> <span class="toc-text">第一个阶段 选股</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#第二个阶段-追涨"><span class="toc-number">1.1.2.</span> <span class="toc-text">第二个阶段 追涨</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#第三个阶段-追跌"><span class="toc-number">1.1.3.</span> <span class="toc-text">第三个阶段 追跌</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#第四个阶段-策略"><span class="toc-number">1.1.4.</span> <span class="toc-text">第四个阶段 策略</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#交易策略的作用"><span class="toc-number">1.1.5.</span> <span class="toc-text">交易策略的作用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#常见的策略"><span class="toc-number">1.1.6.</span> <span class="toc-text">常见的策略</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#定投"><span class="toc-number">1.1.6.1.</span> <span class="toc-text">定投</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#5-5股债平衡"><span class="toc-number">1.1.6.2.</span> <span class="toc-text">5:5股债平衡</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#什么叫网格策略"><span class="toc-number">1.2.</span> <span class="toc-text">什么叫网格策略</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#背景"><span class="toc-number">1.2.1.</span> <span class="toc-text">背景</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#试用范围"><span class="toc-number">1.2.2.</span> <span class="toc-text">试用范围</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#具体操作"><span class="toc-number">1.2.3.</span> <span class="toc-text">具体操作</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#主策略-网格策略基础版"><span class="toc-number">1.2.3.1.</span> <span class="toc-text">主策略 网格策略基础版</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#1-确定交易品种"><span class="toc-number">1.2.3.1.1.</span> <span class="toc-text">1. 确定交易品种</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-制作网格表格"><span class="toc-number">1.2.3.1.2.</span> <span class="toc-text">2. 制作网格表格</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#2-1-设置交易价格"><span class="toc-number">1.2.3.1.2.1.</span> <span class="toc-text">2.1. 设置交易价格</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#2-2-设置交易金额"><span class="toc-number">1.2.3.1.2.2.</span> <span class="toc-text">2.2. 设置交易金额</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#2-3-设置交易日期"><span class="toc-number">1.2.3.1.2.3.</span> <span class="toc-text">2.3. 设置交易日期</span></a></li></ol></li><li class="toc-item toc-level-5"><a class="toc-link" href="#3-压力测试"><span class="toc-number">1.2.3.1.3.</span> <span class="toc-text">3. 压力测试</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#4-设置交易提醒"><span class="toc-number">1.2.3.1.4.</span> <span class="toc-text">4. 设置交易提醒</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#主策略的问题"><span class="toc-number">1.2.3.2.</span> <span class="toc-text">主策略的问题</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#子策略"><span class="toc-number">1.2.3.3.</span> <span class="toc-text">子策略</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#留下利润"><span class="toc-number">1.2.3.4.</span> <span class="toc-text">留下利润</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#逐渐加码"><span class="toc-number">1.2.3.5.</span> <span class="toc-text">逐渐加码</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#多网"><span class="toc-number">1.2.3.6.</span> <span class="toc-text">多网</span></a></li></ol></li></ol></li></ol></li></ol>
+</div>
+<style>
+    .left-col .switch-btn,
+    .left-col .switch-area {
+        display: none;
+    }
+</style>
+
+<input type="button" id="tocButton" value="隐藏目录"  title="点击按钮隐藏或者显示文章目录">
+
+<script>
+    yiliaConfig.toc = ["隐藏目录", "显示目录", !!"false"];
+</script>
+
+
+
+    
+<div class="share">
+    
+        <div class="bdsharebuttonbox">
+            <a href="#" class="fa fa-twitter bds_twi" data-cmd="twi" title="分享到推特"></a>
+            <a href="#" class="fa fa-weibo bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+            <a href="#" class="fa fa-qq bds_sqq" data-cmd="sqq" title="分享给 QQ 好友"></a>
+            <a href="#" class="fa fa-files-o bds_copy" data-cmd="copy" title="复制网址"></a>
+            <a href="#" class="fa fa fa-envelope-o bds_mail" data-cmd="mail" title="通过邮件分享"></a>
+            <a href="#" class="fa fa-weixin bds_weixin" data-cmd="weixin" title="生成文章二维码"></a>
+            <a href="#" class="fa fa-share-alt bds_more" data-cmd="more"></i></a>
+        </div>
+        <script>
+            window._bd_share_config={
+                "common":{"bdSnsKey":{},"bdText":"对网格策略的理解　| Jason's Blog　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+        </script>
+    
+
+    
+</div>
+
+
+
+
+
+
+
+    
+        <section class="youyan" id="comments">
+    <script>
+        var loadComment = function(){
+            var d = document, s = d.createElement('script');
+            s.src = 'http://v2.uyan.cc/code/uyan.js?uid=2134247';
+            (d.head || d.body).appendChild(s);
+        }
+    </script>
+    
+    <script> loadComment(); </script>
+
+    <div id="uyan_frame"></div>
+</section>
+    
+
+
+
+
+    <div class="scroll" id="post-nav-button">
+        
+            <a href="/" title="回到主页"><i class="fa fa-home"></i></a>
+        
+
+        <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
+
+        
+            <a href="/2020/03/02/ETF投资初步考虑/" title="下一篇: ETF投资初步考虑">
+                <i class="fa fa-angle-right"></i>
+            </a>
+        
+    </div>
+
+    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2020/03/02/网格策略的理解/">对网格策略的理解</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/03/02/ETF投资初步考虑/">ETF投资初步考虑</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/03/02/记账与预算初步考虑/">记账与预算</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/12/13/SEDF--社会工程学密码字典生成工具/">SEDF--社会工程学密码字典生成工具</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/12/13/android material design 中修改FloatingActionButton的背景颜色/">android material design 中修改FloatingActionButton的背景颜色</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/12/13/google设备联网激活方法/">google设备联网激活方法</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/12/13/各开源飞控板比较/">各开源飞控板比较（持续更新）</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/12/13/云数贸传销骗局/">云数贸传销骗局--域名篇</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/12/13/App欢迎界面的实现逻辑/">App欢迎界面的实现逻辑</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/12/13/automater构造思路/">automater 构造思路</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/12/13/理解MVP在Android中的应用/">理解MVP在Android中的应用</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/12/13/Android中设置Progress Bar（进度条）的Height（高度）/">Android中设置Progress Bar（进度条）的Height（高度）</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/12/13/大陆地区死宅如何才能愉快的玩Pokemon Go/">大陆地区死宅如何才能愉快的玩Pokemon Go</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/12/13/生活如戏/">生活如“戏”</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/12/13/Android Studio中查看项目的类图/">Android Studio中查看项目的类图</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/12/13/Ubuntu16.04下解决vim python支持的问题/">Ubuntu16.04中编译vim成+python</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/12/13/JPG文件头损坏修复思路/">JPG文件头损坏修复思路（附自动修复程序）</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/12/13/chromeOnKali/">Kali环境下安装google-chrome</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/12/13/SourceInsight 中文乱码的问题解决办法/">Source Insight 中文乱码的问题解决办法</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/12/13/将中文域名解析到gitHubPages/">将中文域名解析到gitHub Pages</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/08/how-to-get-Python2-7-in-CentOs6/">如何在CentOS6上安装Python2.7</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/12/01/ebook-push-system/">自动电子书抓取推送系统</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/21/python中is和双等于号的区别/">python中is和双等于号的区别</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/20/config-hexo-new-function-with-default-editer/">配置hexo new时自动打开默认的编辑器</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/03/搭建物理隔离环境下的python镜像精简源/">搭建物理隔离环境下的python镜像精简源</a></li></ul>
+
+
+
+
+    <script>
+        
+    </script>
+</div>
+      <footer id="footer">
+    <div class="outer">
+        <div id="footer-info">
+            <div class="footer-left">
+                <i class="fa fa-copyright"></i> 
+                2016-2020 Jason Hu
+            </div>
+            <div class="footer-right">
+                <a href="http://hexo.io/" target="_blank" title="快速、简洁且高效的博客框架">Hexo</a>  View <a href="https://github.com/jasonrw" target="_blank" title="简而不减 Hexo 双栏博客主题  v3.0">Yelee</a> on JasonHu's Github <i class="fa fa-heart animated infinite pulse"></i>
+            </div>
+        </div>
+        
+            <div class="visit">
+                
+                    <span id="busuanzi_container_site_pv" style='display:none'>
+                        <span id="site-visit" >本站到访数: 
+                            <span id="busuanzi_value_site_uv"></span>
+                        </span>
+                    </span>
+                
+                
+                    <span>, </span>
+                
+                
+                    <span id="busuanzi_container_page_pv" style='display:none'>
+                        <span id="page-visit">本页阅读量: 
+                            <span id="busuanzi_value_page_pv"></span>
+                        </span>
+                    </span>
+                
+            </div>
+        
+    </div>
+</footer>
+    </div>
+    
+<script data-main="/js/main.js" src="//cdn.bootcss.com/require.js/2.2.0/require.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            var iPad = window.navigator.userAgent.indexOf('iPad');
+            if (iPad > -1 || $(".left-col").css("display") === "none") {
+                var bgColorList = ["#9db3f4", "#414141", "#e5a859", "#f5dfc6", "#c084a0", "#847e72", "#cd8390", "#996731"];
+                var bgColor = Math.ceil(Math.random() * (bgColorList.length - 1));
+                $("body").css({"background-color": bgColorList[bgColor], "background-size": "cover"});
+            }
+            else {
+                var backgroundnum = 5;
+                var backgroundimg = "url(/background/bg-x.jpg)".replace(/x/gi, Math.ceil(Math.random() * backgroundnum));
+                $("body").css({"background": backgroundimg, "background-attachment": "fixed", "background-size": "cover"});
+            }
+        })
+    </script>
+
+
+
+
+<div class="scroll" id="scroll">
+    <a href="#" title="返回顶部"><i class="fa fa-arrow-up"></i></a>
+    <a href="#comments" onclick="load$hide();" title="查看评论"><i class="fa fa-comments-o"></i></a>
+    <a href="#footer" title="转到底部"><i class="fa fa-arrow-down"></i></a>
+</div>
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+  </div>
+</body>
+</html>
