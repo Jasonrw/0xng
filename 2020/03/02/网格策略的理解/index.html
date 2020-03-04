@@ -21,17 +21,15 @@
 <meta property="og:url" content="http://0xng.com/2020/03/02/网格策略的理解/index.html">
 <meta property="og:site_name" content="Jason's Blog">
 <meta property="og:description" content="前几年做过量化择时，主要帮人实现策略，从来没有想着有策略我自己能够理解，第一次看到网格策略的时候，可能是两年以前的事了，才发现，原来有点东西只要写的清楚，我还是能够理解的">
-<meta property="og:image" content="http://0xng.com/2020/03/02/网格策略的理解/基础版操作表格.png">
-<meta property="og:image" content="http://0xng.com/2020/03/02/网格策略的理解/华宝油气-基础版操作示例.png">
-<meta property="og:image" content="http://0xng.com/2020/03/02/网格策略的理解/逐渐加码操作表格.png">
-<meta property="og:image" content="http://0xng.com/2020/03/02/网格策略的理解/多网-小网.png">
-<meta property="og:image" content="http://0xng.com/2020/03/02/网格策略的理解/多网-中网.png">
-<meta property="og:image" content="http://0xng.com/2020/03/02/网格策略的理解/多网-大网.png">
-<meta property="og:updated_time" content="2020-03-02T14:49:03.407Z">
+<meta property="og:image" content="http://0xng.com/2020/03/02/网格策略的理解/华宝油气基础操作示例.png">
+<meta property="og:image" content="http://0xng.com/2020/03/02/网格策略的理解/华宝油气操作示例-小网.png">
+<meta property="og:image" content="http://0xng.com/2020/03/02/网格策略的理解/华宝油气操作示例-中网.png">
+<meta property="og:image" content="http://0xng.com/2020/03/02/网格策略的理解/华宝油气操作示例-大网.png">
+<meta property="og:updated_time" content="2020-03-04T14:07:42.987Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="对网格策略的理解">
 <meta name="twitter:description" content="前几年做过量化择时，主要帮人实现策略，从来没有想着有策略我自己能够理解，第一次看到网格策略的时候，可能是两年以前的事了，才发现，原来有点东西只要写的清楚，我还是能够理解的">
-<meta name="twitter:image" content="http://0xng.com/2020/03/02/网格策略的理解/基础版操作表格.png">
+<meta name="twitter:image" content="http://0xng.com/2020/03/02/网格策略的理解/华宝油气基础操作示例.png">
 
 <link rel="apple-touch-icon" href= "/apple-touch-icon.png">
 
@@ -335,13 +333,13 @@
 <h6 id="2-3-设置交易日期"><a href="#2-3-设置交易日期" class="headerlink" title="2.3. 设置交易日期"></a>2.3. 设置交易日期</h6><p>交易日期主要通过挂单的方式进行，等待走势落入网中</p>
 <h5 id="3-压力测试"><a href="#3-压力测试" class="headerlink" title="3. 压力测试"></a>3. 压力测试</h5><p>压力测试即在设置投资的资金量的时候，考虑最坏的情况能够承受多大的资金损失</p>
 <h5 id="4-设置交易提醒"><a href="#4-设置交易提醒" class="headerlink" title="4. 设置交易提醒"></a>4. 设置交易提醒</h5><p>通过挂单软件进行交易提醒和交易</p>
-<h4 id="主策略的问题"><a href="#主策略的问题" class="headerlink" title="主策略的问题"></a>主策略的问题</h4><p>下面是华宝油气依据基本版的操作表格<br><img src="/2020/03/02/网格策略的理解/基础版操作表格.png" alt="基础版操作表格.png"></p>
-<p>接下来是通过这个策略在前三年的操作示例<br><img src="/2020/03/02/网格策略的理解/华宝油气-基础版操作示例.png" alt="e607be4cd86eb20096df39cdfa315521.png"></p>
-<p>可以看到尽管这个基金这几年基本上没有增长，但是这个策略一直在低吸高抛<br>但是这其实是存在一个问题的，即在2015年到2016年的暴涨中，几乎没有操作，导致错过了一波真正的行情。</p>
+<h4 id="主策略的问题"><a href="#主策略的问题" class="headerlink" title="主策略的问题"></a>主策略的问题</h4><p>下面是华宝油气依据基本版的在前三年的操作示例<br><img src="/2020/03/02/网格策略的理解/华宝油气基础操作示例.png" alt="华宝油气基础操作示例"></p>
+<p>可以看到尽管这个基金这几年基本上没有增长，但是这个策略一直在低吸高抛<br>但是这其实是存在一个问题的，即在2016年到2017年的暴涨中，几乎没有操作，导致错过了一波真正的行情。</p>
 <h4 id="子策略"><a href="#子策略" class="headerlink" title="子策略"></a>子策略</h4><p>为了解决这个问题，增加几个子策略</p>
 <h4 id="留下利润"><a href="#留下利润" class="headerlink" title="留下利润"></a>留下利润</h4><p>顾名思义，即每次把利润留下来，这部分反正是赚的钱，可以一直放到里面，一直到你觉得价格远大于价值的时候在抛售。<br>另外，如果觉得只留利润太少的话，在可承受的范围内可以留1倍或者多倍利润的本金（在上述做法的基础上增加杠杆，提升利润空间）</p>
-<h4 id="逐渐加码"><a href="#逐渐加码" class="headerlink" title="逐渐加码"></a>逐渐加码</h4><p>考虑到价格越低的时候，与价值的差值绝对值越大，在价格越低的网格中增加投入比例，比如每个低价格的网格增加10%的投入<br><img src="/2020/03/02/网格策略的理解/逐渐加码操作表格.png" alt="a27a9bb719db5bc17984764e70658ff5.png"></p>
-<h4 id="多网"><a href="#多网" class="headerlink" title="多网"></a>多网</h4><p>考虑到上述最根本的问题，即为什么吃不到最大的一波行情？其实是因为网格的跨度小了了原因，假设你网格的买入卖出价格设定为20%甚至60%的差值，这个时候操作的次数更少，但是每次操作的回报率要高很多了<br>下面是一个三张网的操作示例（小网5%，中网15%， 大网30%）<br><img src="/2020/03/02/网格策略的理解/多网-小网.png" alt="8e86ffb4d7608fde5ce0b4d0bf5e265c.png"><br><img src="/2020/03/02/网格策略的理解/多网-中网.png" alt="64ba6ad5fa6b858b58ef59a4c301514d.png"><br><img src="/2020/03/02/网格策略的理解/多网-大网.png" alt="369204374a44c8a94132e7d001ca993f.png"></p>
+<h4 id="逐渐加码"><a href="#逐渐加码" class="headerlink" title="逐渐加码"></a>逐渐加码</h4><p>考虑到价格越低的时候，与价值的差值绝对值越大，在价格越低的网格中增加投入比例，比如每个低价格的网格增加10%的投入</p>
+<h4 id="多网"><a href="#多网" class="headerlink" title="多网"></a>多网</h4><p>考虑到上述最根本的问题，即为什么吃不到最大的一波行情？其实是因为网格的跨度小了了原因，假设你网格的买入卖出价格设定为20%甚至60%的差值，这个时候操作的次数更少，但是每次操作的回报率要高很多了<br>下面是一个三张网的操作示例（小网5%，中网15%， 大网30%）<br><img src="/2020/03/02/网格策略的理解/华宝油气操作示例-小网.png" alt="华宝油气操作示例-小网"><br><img src="/2020/03/02/网格策略的理解/华宝油气操作示例-中网.png" alt="华宝油气操作示例-中网"></p>
+<p><img src="/2020/03/02/网格策略的理解/华宝油气操作示例-大网.png" alt="华宝油气操作示例-大网"></p>
 
       
     </div>
@@ -353,7 +351,7 @@
         <p><span>本文标题:</span><a href="/2020/03/02/网格策略的理解/">对网格策略的理解</a></p>
         <p><span>文章作者:</span><a href="/" title="回到主页">Jason Hu</a></p>
         <p><span>发布时间:</span>2020-03-02, 22:24:39</p>
-        <p><span>最后更新:</span>2020-03-02, 22:49:03</p>
+        <p><span>最后更新:</span>2020-03-04, 22:07:42</p>
         <p>
             <span>原始链接:</span><a class="post-url" href="/2020/03/02/网格策略的理解/" title="对网格策略的理解">http://0xng.com/2020/03/02/网格策略的理解/</a>
             <span class="copy-path" data-clipboard-text="原文: http://0xng.com/2020/03/02/网格策略的理解/　　作者: Jason Hu" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
@@ -459,7 +457,7 @@
         
     </div>
 
-    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2020/03/02/网格策略的理解/">对网格策略的理解</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/03/02/ETF投资初步考虑/">ETF投资初步考虑</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/03/02/记账与预算初步考虑/">记账与预算</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/12/13/SEDF--社会工程学密码字典生成工具/">SEDF--社会工程学密码字典生成工具</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/12/13/android material design 中修改FloatingActionButton的背景颜色/">android material design 中修改FloatingActionButton的背景颜色</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/12/13/google设备联网激活方法/">google设备联网激活方法</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/12/13/各开源飞控板比较/">各开源飞控板比较（持续更新）</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/12/13/云数贸传销骗局/">云数贸传销骗局--域名篇</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/12/13/App欢迎界面的实现逻辑/">App欢迎界面的实现逻辑</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/12/13/automater构造思路/">automater 构造思路</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/12/13/理解MVP在Android中的应用/">理解MVP在Android中的应用</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/12/13/Android中设置Progress Bar（进度条）的Height（高度）/">Android中设置Progress Bar（进度条）的Height（高度）</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/12/13/大陆地区死宅如何才能愉快的玩Pokemon Go/">大陆地区死宅如何才能愉快的玩Pokemon Go</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/12/13/生活如戏/">生活如“戏”</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/12/13/Android Studio中查看项目的类图/">Android Studio中查看项目的类图</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/12/13/Ubuntu16.04下解决vim python支持的问题/">Ubuntu16.04中编译vim成+python</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/12/13/JPG文件头损坏修复思路/">JPG文件头损坏修复思路（附自动修复程序）</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/12/13/chromeOnKali/">Kali环境下安装google-chrome</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/12/13/SourceInsight 中文乱码的问题解决办法/">Source Insight 中文乱码的问题解决办法</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/12/13/将中文域名解析到gitHubPages/">将中文域名解析到gitHub Pages</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/08/how-to-get-Python2-7-in-CentOs6/">如何在CentOS6上安装Python2.7</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/12/01/ebook-push-system/">自动电子书抓取推送系统</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/21/python中is和双等于号的区别/">python中is和双等于号的区别</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/20/config-hexo-new-function-with-default-editer/">配置hexo new时自动打开默认的编辑器</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/03/搭建物理隔离环境下的python镜像精简源/">搭建物理隔离环境下的python镜像精简源</a></li></ul>
+    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2020/03/02/网格策略的理解/">对网格策略的理解</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/03/02/ETF投资初步考虑/">ETF投资初步考虑</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/03/02/记账与预算初步考虑/">记账与预算</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/12/13/SEDF--社会工程学密码字典生成工具/">SEDF--社会工程学密码字典生成工具</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/12/13/android material design 中修改FloatingActionButton的背景颜色/">android material design 中修改FloatingActionButton的背景颜色</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/12/13/google设备联网激活方法/">google设备联网激活方法</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/12/13/云数贸传销骗局/">云数贸传销骗局--域名篇</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/12/13/各开源飞控板比较/">各开源飞控板比较（持续更新）</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/12/13/App欢迎界面的实现逻辑/">App欢迎界面的实现逻辑</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/12/13/automater构造思路/">automater 构造思路</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/12/13/理解MVP在Android中的应用/">理解MVP在Android中的应用</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/12/13/Android中设置Progress Bar（进度条）的Height（高度）/">Android中设置Progress Bar（进度条）的Height（高度）</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/12/13/大陆地区死宅如何才能愉快的玩Pokemon Go/">大陆地区死宅如何才能愉快的玩Pokemon Go</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/12/13/生活如戏/">生活如“戏”</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/12/13/Android Studio中查看项目的类图/">Android Studio中查看项目的类图</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/12/13/Ubuntu16.04下解决vim python支持的问题/">Ubuntu16.04中编译vim成+python</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/12/13/JPG文件头损坏修复思路/">JPG文件头损坏修复思路（附自动修复程序）</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/12/13/chromeOnKali/">Kali环境下安装google-chrome</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/12/13/SourceInsight 中文乱码的问题解决办法/">Source Insight 中文乱码的问题解决办法</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/12/13/将中文域名解析到gitHubPages/">将中文域名解析到gitHub Pages</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/08/how-to-get-Python2-7-in-CentOs6/">如何在CentOS6上安装Python2.7</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/12/01/ebook-push-system/">自动电子书抓取推送系统</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/21/python中is和双等于号的区别/">python中is和双等于号的区别</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/20/config-hexo-new-function-with-default-editer/">配置hexo new时自动打开默认的编辑器</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/03/搭建物理隔离环境下的python镜像精简源/">搭建物理隔离环境下的python镜像精简源</a></li></ul>
 
 
 
